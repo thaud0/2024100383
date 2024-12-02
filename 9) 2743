@@ -1,0 +1,9 @@
+#include <string.h>
+#include <stdio.h>
+int main() {
+	char s[101];
+	scanf("%100s", s);
+	int l = strlen(s);
+	printf("%d\n", l);
+	return 0;
+}

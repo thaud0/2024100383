@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 int main() {
-	char s[101];
+	char s[100];
 	scanf("%100s", s);
 	int l = strlen(s);
 	printf("%d\n", l);

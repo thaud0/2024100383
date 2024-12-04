@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+    char word[1000001];
+    int count[26] = {0};
+
+    scanf("%s", word);
+
+    for (int i = 0; word[i] != '\0'; i++) {
+        word[i] = toupper(word[i]);
+        count[word[i] - 'A']++;
+    }
+
+    int maxCount = 0;
+    int maxIndex = -1;
+    int isMultiple = 0;
+
+    for (int i = 0; i < 26; i++) {
+        if (count[i] > maxCount) {
+            maxCount = count[i];
+            maxIndex = i;
+            isMultiple = 0;
+        } else if (count[i] == maxCount) {
+            isMultiple = 1;
+        }
+    }
+
+    if (isMultiple) {
+        printf("?\n");
+    } else {
+        printf("%c\n", maxIndex + 'A');
+    }
+
+    return 0;
+}

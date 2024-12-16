@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_PLAYERS 300
+#define MAX_ROOMS 300
+#define MAX_NAME_LEN 17
+
+typedef struct {
+    int level;
+    char name[MAX_NAME_LEN];
+} Player;
+
+typedef struct {
+    Player players[MAX_PLAYERS];
+    int player_count;
+    int level;
+} Room;
+
+int main() {
+    int N, M;
+    Player players[MAX_PLAYERS];
+    Room rooms[MAX_ROOMS];
+    int room_count = 0;
+
+    scanf("%d %d", &N, &M);
+
+    for (int i = 0; i < N; i++) {
+        scanf("%d %s", &players[i].level, players[i].name);
+    }
+
+    for (int i = 0; i < N; i++) {
+        int room_idx = -1;
+
+        for (int j = 0; j < room_count; j++) {
+            if (abs(rooms[j].level - players[i].level) <= 10 && rooms[j].player_count < M) {
+                room_idx = j;
+                break;
+            }
+        }
+
+        if (room_idx == -1) {
+            rooms[room_count].level = players[i].level;
+            rooms[room_count].player_count = 0;
+            room_idx = room_count++;
+        }
+
+        rooms[room_idx].players[rooms[room_idx].player_count++] = players[i];
+    }
+
+    for (int i = 0; i < room_count; i++) {
+        for (int j = 0; j < rooms[i].player_count - 1; j++) {
+            for (int k = j + 1; k < rooms[i].player_count; k++) {
+                if (strcmp(rooms[i].players[j].name, rooms[i].players[k].name) > 0) {
+                    Player temp = rooms[i].players[j];
+                    rooms[i].players[j] = rooms[i].players[k];
+                    rooms[i].players[k] = temp;
+                }
+            }
+        }
+
+        if (rooms[i].player_count == M) {
+            printf("Started!\n");
+        } else {
+            printf("Waiting!\n");
+        }
+
+        for (int j = 0; j < rooms[i].player_count; j++) {
+            printf("%d %s\n", rooms[i].players[j].level, rooms[i].players[j].name);
+        }
+    }
+
+    return 0;
+}

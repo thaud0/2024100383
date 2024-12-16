@@ -1,1 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "player.h"
+#include "room.h"
 
+int N, M;
+Player players[MAX_PLAYERS];
+Room rooms[MAX_ROOMS];
+int room_count = 0;
+
+int main() {
+    scanf("%d %d", &N, &M);
+
+    for (int i = 0; i < N; i++) {
+        scanf("%d %s", &players[i].level, players[i].name);
+    }
+
+    for (int i = 0; i < N; i++) {
+        int room_idx = find_room(rooms, room_count, players[i].level, M);
+        if (room_idx == -1) {
+            room_idx = create_new_room(rooms, &room_count, players[i].level);
+        }
+        add_player_to_room(rooms, room_idx, players[i]);
+    }
+
+    for (int i = 0; i < room_count; i++) {
+        qsort(rooms[i].players, rooms[i].player_count, sizeof(Player), comp);
+
+        if (rooms[i].player_count == M) {
+            printf("Started!\n");
+        } else {
+            printf("Waiting!\n");
+        }
+
+        for (int j = 0; j < rooms[i].player_count; j++) {
+            printf("%d %s\n", rooms[i].players[j].level, rooms[i].players[j].name);
+        }
+    }
+
+    return 0;
+}
